@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+ 
     @IBOutlet weak var redValueLabel: UILabel!
     @IBOutlet weak var greenValueLabel: UILabel!
     @IBOutlet weak var blueValueLabel: UILabel!
