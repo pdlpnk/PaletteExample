@@ -19,84 +19,87 @@ class ViewController: UIViewController {
     @IBOutlet weak var greenValueSlider: UISlider!
     @IBOutlet weak var blueValueSlider: UISlider!
     
+    let maxColorValue: Float = 255
+    let minColorValue: Float = 0
+    var mediumColorValue: Float{
+        return (maxColorValue - minColorValue) / 2.0 + minColorValue
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        redValueSlider.value = 127
-        greenValueSlider.value = 127
-        blueValueSlider.value = 127
-        redValueLabel.text = "127"
-        greenValueLabel.text = "127"
-        blueValueLabel.text = "127"
-        colorView.backgroundColor = UIColor(red: 127 / 255.0,
-                                            green: 127 / 255.0,
-                                            blue: 127 / 255.0,
-                                            alpha: 1.0)
+        initialSetupForSliders()
+        updateColorView()
     }
 
     @IBAction func minPressed(_ sender: Any) {
-        redValueSlider.value = 0
-        greenValueSlider.value = 0
-        blueValueSlider.value = 0
-        redValueLabel.text = "0"
-        greenValueLabel.text = "0"
-        blueValueLabel.text = "0"
-        colorView.backgroundColor = UIColor(red: 0 / 255.0,
-                                            green: 0 / 255.0,
-                                            blue: 0 / 255.0,
-                                            alpha: 1.0)
+        updateAllSlidersValue(minColorValue)
+        updateSlidersLabels()
+        updateColorView()
     }
     
     @IBAction func mediumPressed(_ sender: Any) {
-        redValueSlider.value = 127
-        greenValueSlider.value = 127
-        blueValueSlider.value = 127
-        redValueLabel.text = "127"
-        greenValueLabel.text = "127"
-        blueValueLabel.text = "127"
-        colorView.backgroundColor = UIColor(red: 127 / 255.0,
-                                            green: 127 / 255.0,
-                                            blue: 127 / 255.0,
-                                            alpha: 1.0)
+        updateAllSlidersValue(mediumColorValue)
+        updateSlidersLabels()
+        updateColorView()
     }
     
     @IBAction func maxPressed(_ sender: Any) {
-        redValueSlider.value = 255
-        greenValueSlider.value = 255
-        blueValueSlider.value = 255
-        redValueLabel.text = "255"
-        greenValueLabel.text = "255"
-        blueValueLabel.text = "255"
-        colorView.backgroundColor = UIColor(red: 255 / 255.0,
-                                            green: 255 / 255.0,
-                                            blue: 255 / 255.0,
-                                            alpha: 1.0)
+        updateAllSlidersValue(maxColorValue)
+        updateSlidersLabels()
+        updateColorView()
     }
     
     @IBAction func redValueChanged(_ sender: Any) {
-        redValueLabel.text = "\(Int(redValueSlider.value))"
-        colorView.backgroundColor = UIColor(red: CGFloat(redValueSlider.value) / 255.0,
-                                            green: CGFloat(greenValueSlider.value) / 255.0,
-                                            blue: CGFloat(blueValueSlider.value) / 255.0,
-                                            alpha: 1.0)
+        updateSlidersLabels()
+        updateColorView()
     }
     
     @IBAction func greenValueChanged(_ sender: Any) {
-        greenValueLabel.text = "\(Int(greenValueSlider.value))"
-        colorView.backgroundColor = UIColor(red: CGFloat(redValueSlider.value) / 255.0,
-                                            green: CGFloat(greenValueSlider.value) / 255.0,
-                                            blue: CGFloat(blueValueSlider.value) / 255.0,
-                                            alpha: 1.0)
+        updateSlidersLabels()
+        updateColorView()
     }
     
     @IBAction func blueValueChanged(_ sender: Any) {
-        blueValueLabel.text = "\(Int(blueValueSlider.value))"
-        colorView.backgroundColor = UIColor(red: CGFloat(redValueSlider.value) / 255.0,
-                                            green: CGFloat(greenValueSlider.value) / 255.0,
-                                            blue: CGFloat(blueValueSlider.value) / 255.0,
+        updateSlidersLabels()
+        updateColorView()
+    }
+    
+    // MARK: - Optimization functions
+    
+    func updateColorView(){
+        let redValueColor = CGFloat(redValueSlider.value) / CGFloat(maxColorValue)
+        let greenValueColor = CGFloat(greenValueSlider.value) / CGFloat(maxColorValue)
+        let blueValueColor = CGFloat(blueValueSlider.value) / CGFloat(maxColorValue)
+        colorView.backgroundColor = UIColor(red: redValueColor,
+                                            green: greenValueColor,
+                                            blue: blueValueColor,
                                             alpha: 1.0)
     }
     
+    func updateSlidersLabels(){
+        redValueLabel.text = "\(Int(redValueSlider.value))"
+        greenValueLabel.text = "\(Int(greenValueSlider.value))"
+        blueValueLabel.text = "\(Int(blueValueSlider.value))"
+    }
     
+    func updateAllSlidersValue(_ value: Float){
+        redValueSlider.value = value
+        greenValueSlider.value = value
+        blueValueSlider.value = value
+    }
+    
+    func setupBoundaryValue(for slider: UISlider){
+        slider.minimumValue = minColorValue
+        slider.maximumValue = maxColorValue
+    }
+    
+    func initialSetupForSliders(){
+        setupBoundaryValue(for: redValueSlider)
+        setupBoundaryValue(for: greenValueSlider)
+        setupBoundaryValue(for: blueValueSlider)
+        
+        updateAllSlidersValue(mediumColorValue)
+        updateSlidersLabels()
+    }
 }
 
